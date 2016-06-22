@@ -1,39 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { Hero } from './hero';
-import { HeroDetailComponent } from './hero-detail.component';
+import { Component } from '@angular/core';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+
 import { HeroService } from './hero.service';
+import { HeroesComponent } from './heroes.component';
+import { DashboardComponent} from './dashboard.component';
+import { HeroDetailComponent } from './hero-detail.component';
 
 @Component({
   moduleId: module.id,
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
-  directives: [HeroDetailComponent],
-  providers: [HeroService]
+  directives: [ROUTER_DIRECTIVES],
+  providers: [
+    ROUTER_PROVIDERS,
+    HeroService
+  ]
 })
-export class AppComponent implements OnInit {
+@RouteConfig([
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardComponent,
+    useAsDefault: true
+  },
+  {
+    path: '/heroes',
+    name: 'Heroes',
+    component: HeroesComponent
+  },
+  {
+    path: '/detail/:id',
+    name: 'HeroDetail',
+    component: HeroDetailComponent
+  }
+])
+export class AppComponent {
   title = '英雄指南';
-  heroes: Hero[];
-  selectedHero: Hero;
-
-  constructor(private heroService: HeroService) 
-  { 
-
-  }
-
-  getHeroes() {
-    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
-  }
-  getHeroesSlow() {
-    this.heroService.getHeroesSlow().then(heroes => this.heroes = heroes);
-  }
-
-  ngOnInit() {
-    //this.getHeroes();
-    this.getHeroesSlow();
-  }
-  onSelect(hero: Hero) { 
-    this.selectedHero = hero;
-  };
 
 }
